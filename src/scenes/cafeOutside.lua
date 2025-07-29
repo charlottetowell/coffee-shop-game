@@ -7,7 +7,7 @@ function cafeOutside:draw()
     love.graphics.setBackgroundColor(colours.sky.r, colours.sky.g, colours.sky.b)
 
     -- draw cafe
-    love.graphics.draw(assets.cafe, 0, 0, 0, pixelScale, pixelScale)
+    love.graphics.draw(assets.cafeOutside, 0, 0, 0, pixelScale, pixelScale)
 
     -- draw ground
     love.graphics.setColor(colours.ground.r, colours.ground.g, colours.ground.b)
@@ -15,6 +15,8 @@ function cafeOutside:draw()
 
     -- draw clouds
     setColourWhite()
-    love.graphics.draw(assets.clouds.image, assets.clouds.quads[1], 0, 0, 0, pixelScale, pixelScale)
-    love.graphics.draw(assets.clouds.image, assets.clouds.quads[2], windowHeight/4, 0, 0, pixelScale, pixelScale)
+    love.graphics.draw(assets.clouds.image, assets.clouds.quads[1], windowWidth * 0.1, windowHeight * 0.1, 0, pixelScale, pixelScale)
+    love.graphics.draw(assets.clouds.image, assets.clouds.quads[2], windowWidth * 0.6, windowHeight * 0.25, 0, pixelScale, pixelScale)
+    love.graphics.draw(assets.clouds.image, assets.clouds.quads[3], windowWidth * 0.2, windowHeight * 0.4, 0, pixelScale, pixelScale)
+    love.graphics.draw(assets.clouds.image, assets.clouds.quads[4], windowWidth * 0.7, windowHeight * 0.55, 0, pixelScale, pixelScale)
 end

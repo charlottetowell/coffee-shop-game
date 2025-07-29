@@ -6,8 +6,8 @@ local tilesetQuads = {
     clouds = {
         love.graphics.newQuad(0, 0, 48, 16, tilesets.clouds),
         love.graphics.newQuad(0, 17, 48, 16, tilesets.clouds),
-        love.graphics.newQuad(17, 0, 47, 16, tilesets.clouds),
-        love.graphics.newQuad(17, 17, 60, 16, tilesets.clouds)
+        love.graphics.newQuad(0, 17, 47, 16, tilesets.clouds),
+        love.graphics.newQuad(48, 17, 60, 16, tilesets.clouds)
     }
 }
 
