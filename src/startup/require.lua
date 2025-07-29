@@ -1,5 +1,8 @@
 function requireEverything()
 
+    -- global variables
+    require "src/startup/globals"
+
     -- game states + registry
     require "src/states/registry"
     require "src/states/mainMenu"

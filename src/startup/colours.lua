@@ -1,5 +1,6 @@
 colours = {
     sky = { r = 116, g = 195, b = 255 }
+    ,ground = { r = 81, g = 52, b = 32}
 }
 
 -- utility to convert to LOVE's /255 RGB format
