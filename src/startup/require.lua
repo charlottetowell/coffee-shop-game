@@ -15,6 +15,9 @@ function requireEverything()
     -- colours
     require "src/startup/colours"
 
+    -- assets
+    require "src/startup/assets"
+
     -- scenes
     require "src/scenes/init"
     

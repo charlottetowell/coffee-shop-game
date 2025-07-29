@@ -1,0 +1,22 @@
+-- tilesets
+local tilesets = {
+    clouds = love.graphics.newImage("assets/clouds.png")
+}
+local tilesetQuads = {
+    clouds = {
+        love.graphics.newQuad(0, 0, 48, 16, tilesets.clouds),
+        love.graphics.newQuad(0, 17, 48, 16, tilesets.clouds),
+        love.graphics.newQuad(17, 0, 47, 16, tilesets.clouds),
+        love.graphics.newQuad(17, 17, 60, 16, tilesets.clouds)
+    }
+}
+
+-- image assets
+assets = {
+    cafeOutside = love.graphics.newImage("assets/cafe-outside.png")
+    ,playButton = love.graphics.newImage("assets/play-button.png")
+    ,clouds = {
+        image = tilesets.clouds
+        ,quads = tilesetQuads.clouds
+    }
+}
