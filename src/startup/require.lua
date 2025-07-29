@@ -8,5 +8,11 @@ function requireEverything()
     require "src/draw"
     require "src/update"
     require "src/quit"
+
+    -- colours
+    require "src/startup/colours"
+
+    -- scenes
+    require "src/scenes/init"
     
 end

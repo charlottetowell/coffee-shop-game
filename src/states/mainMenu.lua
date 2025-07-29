@@ -11,6 +11,7 @@ StateRegistry:register(menuState.key, menuState)
 
 function menuState:draw()
     -- draw 
+    cafeOutside:draw()
 end
 
 

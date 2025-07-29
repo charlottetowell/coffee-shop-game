@@ -21,7 +21,7 @@ function gameStart()
 
     require("src/startup/require")
     requireEverything()
-
+    
     -- set initial game state
     StateRegistry:setCurrentState("MAIN_MENU")
 end
