@@ -3,7 +3,7 @@ require "src/states/registry"
 
 menuState = GameState:new({
     key = "INTRO"
-    ,transition_to_key = "PLAY"
+    ,transition_to_key = "MAIN_MENU"
 })
 
 -- register state
@@ -20,7 +20,7 @@ end
 
 function menuState:update(dt)
     if alpha == 0 then
-        menuState:transitionTo(self.transition_to_key)
+        StateRegistry:transitionTo(self.transition_to_key)
     else
         alpha = alpha - dt
         if alpha < 0 then
