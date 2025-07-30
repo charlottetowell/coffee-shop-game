@@ -20,7 +20,5 @@ function love.quit()
 end
 
 function love.resize(w, h)
-    windowWidth = w
-    windowHeight = h
-    setPixelScale()
+    setWindowSize(w, h)
 end

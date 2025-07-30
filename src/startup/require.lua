@@ -12,6 +12,9 @@ function requireEverything()
     require "src/update"
     require "src/quit"
 
+    -- window size handling
+    require "src/startup/windowSize"
+
     -- colours
     require "src/startup/colours"
 

@@ -22,19 +22,3 @@ function gameStart()
     -- set initial game state
     StateRegistry:setCurrentState("MAIN_MENU")
 end
-
-
-function setWindowSize(fullscreen, width, height)
-    if fullscreen then
-        love.window.setFullscreen(true)
-        windowWidth = love.graphics.getWidth()
-        windowHeight = love.graphics.getHeight()
-    else
-        -- verify that dont exceed screen dimensions
-        local screenWidth, screenHeight = love.window.getDesktopDimensions()
-        windowWidth = math.min(width, screenWidth)
-        windowHeight = math.min(height, screenHeight*0.9)
-        love.window.setMode( windowWidth, windowHeight, {resizable = true} )
-    end
-    setPixelScale()
-end
