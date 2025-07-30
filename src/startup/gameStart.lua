@@ -20,5 +20,5 @@ function gameStart()
     setWindowSize(false, windowWidth, windowHeight)
     
     -- set initial game state
-    StateRegistry:setCurrentState("INTRO")
+    StateRegistry:setCurrentState("MAIN_MENU")
 end

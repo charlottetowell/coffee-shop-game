@@ -14,12 +14,24 @@ function menuState:draw()
     -- draw 
     cafeOutside:draw()
 
-    -- play button
+    -- draw buttons
     suit.draw()
 end
 
 function menuState:update(dt)
-    if suit.ImageButton(assets.playButton, {hovered=assets.playButtonHover, scale=pixelScale}, windowWidth * 0.60, windowHeight * 0.75).hit then
-            print("Button clicked!")
+    if suit.ImageButton(assets.playButton, {hovered=assets.playButtonHover, scale=pixelScale}, windowWidth * 0.6, windowHeight * 0.75).hit then
+        print("Button clicked!")
     end
+
+    -- -- centre info button underneath image button
+    -- local imageButtonCenterX = (windowWidth * 0.6) + (assets.playButton:getWidth() * pixelScale) / 2
+    
+    -- love.graphics.setFont(fonts.cousineBold)
+    -- local font = love.graphics.getFont()
+    -- local infoButtonWidth = font:getWidth("Info") + 4
+    -- local infoButtonX = imageButtonCenterX - infoButtonWidth / 2
+
+    -- if suit.Button("Info", {}, infoButtonX, (windowHeight - 10*pixelScale)).hit then
+    --     print("Info button clicked!")
+    -- end
 end
