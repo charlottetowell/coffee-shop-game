@@ -12,21 +12,27 @@ return function(core, normal, ...)
 	opt.hovered = opt.hovered or opt[2] or opt.normal
 	opt.active = opt.active or opt[3] or opt.hovered
 	opt.id = opt.id or opt.normal
+	opt.scale = opt.scale or 1
 
 	local image = assert(opt.normal, "No image for state `normal'")
 
 	core:registerMouseHit(opt.id, x, y, function(u,v)
 		-- mouse in image?
 		u, v = math.floor(u+.5), math.floor(v+.5)
-		if u < 0 or u >= image:getWidth() or v < 0 or v >= image:getHeight() then
+		local scaledWidth = image:getWidth() * opt.scale
+		local scaledHeight = image:getHeight() * opt.scale
+		if u < 0 or u >= scaledWidth or v < 0 or v >= scaledHeight then
 			return false
 		end
 
 		if opt.mask then
 			-- alpha test
+			-- convert scaled coordinates back to original image coordinates
+			local originalU = math.floor(u / opt.scale + 0.5)
+			local originalV = math.floor(v / opt.scale + 0.5)
 			assert(isType(opt.mask, "ImageData"), "Option `mask` is not a love.image.ImageData")
-			assert(u < mask:getWidth() and v < mask:getHeight(), "Mask may not be smaller than image.")
-			local _,_,_,a = mask:getPixel(u,v)
+			assert(originalU < opt.mask:getWidth() and originalV < opt.mask:getHeight(), "Mask may not be smaller than image.")
+			local _,_,_,a = opt.mask:getPixel(originalU, originalV)
 			return a > 0
 		end
 
@@ -41,10 +47,11 @@ return function(core, normal, ...)
 
 	assert(isType(image, "Image"), "state image is not a love.graphics.image")
 
-	core:registerDraw(opt.draw or function(image,x,y, r,g,b,a)
-		love.graphics.setColor(r,g,b,a)
-		love.graphics.draw(image,x,y)
-	end, image, x,y, love.graphics.getColor())
+	local r, g, b, a = love.graphics.getColor()
+	core:registerDraw(opt.draw or function(image,x,y, r,g,b,a, scale)
+		love.graphics.setColor(r or 1, g or 1, b or 1, a or 1)
+		love.graphics.draw(image, x, y, 0, scale, scale)
+	end, image, x,y, r or 1, g or 1, b or 1, a or 1, opt.scale)
 
 	return {
 		id = opt.id,
