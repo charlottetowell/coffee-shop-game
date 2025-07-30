@@ -22,6 +22,9 @@ function requireEverything()
     -- assets
     require "src/startup/assets"
 
+    -- libraries
+    require "libraries/init"
+
     -- scenes
     require "src/scenes/init"
     
