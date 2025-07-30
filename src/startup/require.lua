@@ -5,6 +5,7 @@ function requireEverything()
 
     -- game states + registry
     require "src/states/registry"
+    require "src/states/intro"
     require "src/states/mainMenu"
 
     -- main controllers

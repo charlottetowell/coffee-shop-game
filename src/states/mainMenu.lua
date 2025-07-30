@@ -3,7 +3,7 @@ require "src/states/registry"
 
 menuState = GameState:new({
     key = "MAIN_MENU"
-    ,transition_to_key = "PLAY"
+    ,transition_to_key = "INTRO"
 })
 
 -- register state
