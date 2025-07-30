@@ -6,6 +6,10 @@ baseHeightPx = 96
 -- default scale
 pixelScale = 10
 
+-- window dimensions
+windowWidth = baseWidthPx * pixelScale
+windowHeight = baseHeightPx * pixelScale
+
 function setWindowSize(width, height)
     -- set based on max screen dimensions is size not provided
     if not width or not height then

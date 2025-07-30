@@ -15,6 +15,7 @@ local tilesetQuads = {
 assets = {
     cafeOutside = love.graphics.newImage("assets/cafe-outside.png")
     ,playButton = love.graphics.newImage("assets/play-button.png")
+    ,playButtonHover = love.graphics.newImage("assets/play-button-hover.png")
     ,clouds = {
         image = tilesets.clouds
         ,quads = tilesetQuads.clouds

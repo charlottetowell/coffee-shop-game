@@ -3,10 +3,8 @@ function requireEverything()
     -- global variables
     require "src/startup/globals"
 
-    -- game states + registry
+    -- game state registry
     require "src/states/registry"
-    require "src/states/intro"
-    require "src/states/mainMenu"
 
     -- main controllers
     require "src/draw"
@@ -27,5 +25,9 @@ function requireEverything()
 
     -- scenes
     require "src/scenes/init"
+
+    -- game states
+    require "src/states/intro"
+    require "src/states/mainMenu"
     
 end
