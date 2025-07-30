@@ -18,3 +18,9 @@ end
 function love.quit()
   quitGame()
 end
+
+function love.resize(w, h)
+    windowWidth = w
+    windowHeight = h
+    setPixelScale()
+end
