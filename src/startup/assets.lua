@@ -20,3 +20,8 @@ assets = {
         ,quads = tilesetQuads.clouds
     }
 }
+
+-- fonts
+fonts = {
+    cousineBold = love.graphics.newFont("assets/fonts/Cousine-Bold.ttf", 15)
+}
