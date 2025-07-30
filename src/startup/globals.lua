@@ -2,8 +2,8 @@
 local baseWidthPx = 128
 local baseHeightPx = 96
 
--- init scale
-pixelScale = 5
+-- default scale
+pixelScale = 10
 windowWidth = baseWidthPx * pixelScale
 windowHeight = baseHeightPx * pixelScale
 

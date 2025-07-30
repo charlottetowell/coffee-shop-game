@@ -30,11 +30,11 @@ function setWindowSize(fullscreen, width, height)
         windowWidth = love.graphics.getWidth()
         windowHeight = love.graphics.getHeight()
     else
-        love.window.setMode( width, height, {resizable = true} )
-
-        -- Update to actual window size
-        windowWidth = love.graphics.getWidth()
-        windowHeight = love.graphics.getHeight()
+        -- verify that dont exceed screen dimensions
+        local screenWidth, screenHeight = love.window.getDesktopDimensions()
+        windowWidth = math.min(width, screenWidth)
+        windowHeight = math.min(height, screenHeight*0.9)
+        love.window.setMode( windowWidth, windowHeight, {resizable = true} )
     end
     setPixelScale()
 end
