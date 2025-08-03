@@ -9,57 +9,46 @@ latteArtState = GameState:new({
 -- register state
 StateRegistry:register(latteArtState.key, latteArtState)
 
--- Table to store line points
-linePoints = {}
 
 local latteArtConfig = require("src/config/latteArt/latteArt")
 
--- Sub-states
+-- init vars
+linePoints = {}
 local SUB_STATE = {
     DRAW_ART = "DRAW_ART",
     JUDGE_ART = "JUDGE_ART"
 }
-
--- Current sub-state
 local currentSubState = SUB_STATE.DRAW_ART
-
--- Current latte art pattern
 local CURRENT_LATTE_ART = latteArtConfig[math.random(#latteArtConfig)]
 
--- Update predefined path to use the selected latte art pattern
-predefinedPath = CURRENT_LATTE_ART.path
 
--- Tolerance value for line drawing
-local tolerance = 50
+local drawTolerance = 50
+local matchTolerance = 50
 
--- Stricter tolerance for match percentage calculation
-local strictTolerance = 50
-
--- Function to check if a point is within tolerance of the predefined path
+-- draw line
 local function isPointNearPath(x, y)
-    for i = 1, #predefinedPath, 2 do
-        local px, py = predefinedPath[i], predefinedPath[i + 1]
+    for i = 1, #CURRENT_LATTE_ART.path, 2 do
+        local px, py = CURRENT_LATTE_ART.path[i], CURRENT_LATTE_ART.path[i + 1]
         local distance = math.sqrt((x - px)^2 + (y - py)^2)
-        if distance <= tolerance then
+        if distance <= drawTolerance then
             return true
         end
     end
     return false
 end
 
--- Function to check if a point is within the stricter tolerance of the predefined path
+-- contribute to match %
 local function isPointStrictlyNearPath(x, y)
-    for i = 1, #predefinedPath, 2 do
-        local px, py = predefinedPath[i], predefinedPath[i + 1]
+    for i = 1, #CURRENT_LATTE_ART.path, 2 do
+        local px, py = CURRENT_LATTE_ART.path[i], CURRENT_LATTE_ART.path[i + 1]
         local distance = math.sqrt((x - px)^2 + (y - py)^2)
-        if distance <= strictTolerance then
+        if distance <= matchTolerance then
             return true
         end
     end
     return false
 end
 
--- Function to calculate the total length of a path
 local function calculatePathLength(path)
     local length = 0
     for i = 1, #path - 2, 2 do
@@ -75,7 +64,7 @@ local function computeMatchPercentage()
     if #linePoints < 4 then return 0 end -- No match if not enough points
 
     local matchingLength = 0
-    local totalPathLength = calculatePathLength(predefinedPath)
+    local totalPathLength = calculatePathLength(CURRENT_LATTE_ART.path)
 
     for i = 1, #linePoints - 2, 2 do
         local x1, y1 = linePoints[i], linePoints[i + 1]
@@ -91,23 +80,19 @@ local function computeMatchPercentage()
 end
 
 function latteArtState:draw()
-    -- Draw black background
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.rectangle("fill", 0, 0, windowWidth, windowHeight)
+    -- draw 
+    coffeeBench:draw()
 
     if currentSubState == SUB_STATE.DRAW_ART then
-        -- Draw white text
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.print("Latte Art State", windowWidth * 0.5, windowHeight * 0.5)
 
-        -- Draw the predefined path in red
-        if #predefinedPath >= 4 then -- Ensure at least two vertices (x, y pairs)
+        -- draw the latte art path
+        if #CURRENT_LATTE_ART.path >= 4 then -- min 2 vertices
             love.graphics.setColor(1, 0, 0)
-            love.graphics.line(predefinedPath)
+            love.graphics.line(CURRENT_LATTE_ART.path)
         end
 
-        -- Draw the user's line if within tolerance
-        if #linePoints >= 4 then -- Ensure at least two vertices (x, y pairs)
+        -- draw user's path if within drawTolerance
+        if #linePoints >= 4 then -- min 2 vertices
             local filteredPoints = {}
             for i = 1, #linePoints, 2 do
                 local x, y = linePoints[i], linePoints[i + 1]
@@ -123,7 +108,7 @@ function latteArtState:draw()
             end
         end
 
-        -- Compute and display match percentage
+        -- match percentage
         local matchPercentage = computeMatchPercentage()
         love.graphics.setColor(1, 1, 1)
         love.graphics.print("Match: " .. matchPercentage .. "%", 10, 10)
