@@ -21,6 +21,13 @@ assets = {
         ,quads = tilesetQuads.clouds
     }
     ,coffeeBase = love.graphics.newImage("assets/coffee-base.png")
+    ,latteArt = {
+        ,heart_20 = love.graphics.newImage("assets/latteArt/heart_20.png")
+        ,heart_40 = love.graphics.newImage("assets/latteArt/heart_40.png")
+        ,heart_60 = love.graphics.newImage("assets/latteArt/heart_60.png")
+        ,heart_80 = love.graphics.newImage("assets/latteArt/heart_80.png")
+        ,heart_100 = love.graphics.newImage("assets/latteArt/heart_100.png")
+    }
 }
 
 -- fonts
