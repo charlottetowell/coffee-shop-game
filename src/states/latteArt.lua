@@ -118,6 +118,11 @@ function latteArtState:draw()
         love.graphics.print("Judging Art...", windowWidth * 0.5, windowHeight * 0.4)
         love.graphics.print("Final Match: " .. computeMatchPercentage() .. "%", windowWidth * 0.5, windowHeight * 0.5)
     end
+
+    -- Display mouse position for debugging
+    local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print("Mouse: (" .. mouseX .. ", " .. mouseY .. ")", windowWidth - 150, 10)
 end
 
 function latteArtState:update(dt)
