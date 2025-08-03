@@ -9,11 +9,6 @@ latteArtState = GameState:new({
 -- register state
 StateRegistry:register(latteArtState.key, latteArtState)
 
-mouse = {
-    x = love.mouse.getX(),
-    y = love.mouse.getY()
-}
-
 -- Table to store line points
 linePoints = {}
 
@@ -25,6 +20,21 @@ predefinedPath = {
     400, 250,
     500, 300
 }
+
+-- Tolerance value for line comparison
+tolerance = 20
+
+-- Function to check if a point is within tolerance of the predefined path
+local function isPointNearPath(x, y)
+    for i = 1, #predefinedPath, 2 do
+        local px, py = predefinedPath[i], predefinedPath[i + 1]
+        local distance = math.sqrt((x - px)^2 + (y - py)^2)
+        if distance <= tolerance then
+            return true
+        end
+    end
+    return false
+end
 
 function latteArtState:draw()
     -- Draw black background
@@ -41,10 +51,21 @@ function latteArtState:draw()
         love.graphics.line(predefinedPath)
     end
 
-    -- Draw the line based on stored points
+    -- Draw the user's line if within tolerance
     if #linePoints >= 4 then -- Ensure at least two vertices (x, y pairs)
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.line(linePoints)
+        local filteredPoints = {}
+        for i = 1, #linePoints, 2 do
+            local x, y = linePoints[i], linePoints[i + 1]
+            if isPointNearPath(x, y) then
+                table.insert(filteredPoints, x)
+                table.insert(filteredPoints, y)
+            end
+        end
+
+        if #filteredPoints >= 4 then
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.line(filteredPoints)
+        end
     end
 end
 
