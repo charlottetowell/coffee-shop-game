@@ -21,11 +21,12 @@ predefinedPath = {
     500, 300
 }
 
--- Tolerance value for line comparison
-tolerance = 20
+-- Update tolerances
+-- Tolerance value for line drawing
+local tolerance = 50
 
 -- Stricter tolerance for match percentage calculation
-strictTolerance = 10
+local strictTolerance = 50
 
 -- Function to check if a point is within tolerance of the predefined path
 local function isPointNearPath(x, y)
@@ -51,21 +52,35 @@ local function isPointStrictlyNearPath(x, y)
     return false
 end
 
--- Function to compute match percentage between user's line and predefined path
+-- Function to calculate the total length of a path
+local function calculatePathLength(path)
+    local length = 0
+    for i = 1, #path - 2, 2 do
+        local x1, y1 = path[i], path[i + 1]
+        local x2, y2 = path[i + 2], path[i + 3]
+        length = length + math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
+    end
+    return length
+end
+
+-- Update computeMatchPercentage to consider the length of the user's line
 local function computeMatchPercentage()
     if #linePoints < 4 then return 0 end -- No match if not enough points
 
-    local matchingPoints = 0
-    local totalPoints = #linePoints / 2
+    local matchingLength = 0
+    local totalPathLength = calculatePathLength(predefinedPath)
 
-    for i = 1, #linePoints, 2 do
-        local x, y = linePoints[i], linePoints[i + 1]
-        if isPointStrictlyNearPath(x, y) then
-            matchingPoints = matchingPoints + 1
+    for i = 1, #linePoints - 2, 2 do
+        local x1, y1 = linePoints[i], linePoints[i + 1]
+        local x2, y2 = linePoints[i + 2], linePoints[i + 3]
+
+        -- Check if both points of the segment are near the predefined path
+        if isPointStrictlyNearPath(x1, y1) and isPointStrictlyNearPath(x2, y2) then
+            matchingLength = matchingLength + math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
         end
     end
 
-    return math.floor((matchingPoints / totalPoints) * 100)
+    return math.min(math.floor((matchingLength / totalPathLength) * 100), 100)
 end
 
 function latteArtState:draw()
