@@ -24,6 +24,9 @@ predefinedPath = {
 -- Tolerance value for line comparison
 tolerance = 20
 
+-- Stricter tolerance for match percentage calculation
+strictTolerance = 10
+
 -- Function to check if a point is within tolerance of the predefined path
 local function isPointNearPath(x, y)
     for i = 1, #predefinedPath, 2 do
@@ -34,6 +37,35 @@ local function isPointNearPath(x, y)
         end
     end
     return false
+end
+
+-- Function to check if a point is within the stricter tolerance of the predefined path
+local function isPointStrictlyNearPath(x, y)
+    for i = 1, #predefinedPath, 2 do
+        local px, py = predefinedPath[i], predefinedPath[i + 1]
+        local distance = math.sqrt((x - px)^2 + (y - py)^2)
+        if distance <= strictTolerance then
+            return true
+        end
+    end
+    return false
+end
+
+-- Function to compute match percentage between user's line and predefined path
+local function computeMatchPercentage()
+    if #linePoints < 4 then return 0 end -- No match if not enough points
+
+    local matchingPoints = 0
+    local totalPoints = #linePoints / 2
+
+    for i = 1, #linePoints, 2 do
+        local x, y = linePoints[i], linePoints[i + 1]
+        if isPointStrictlyNearPath(x, y) then
+            matchingPoints = matchingPoints + 1
+        end
+    end
+
+    return math.floor((matchingPoints / totalPoints) * 100)
 end
 
 function latteArtState:draw()
@@ -67,6 +99,11 @@ function latteArtState:draw()
             love.graphics.line(filteredPoints)
         end
     end
+
+    -- Compute and display match percentage
+    local matchPercentage = computeMatchPercentage()
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print("Match: " .. matchPercentage .. "%", 10, 10)
 end
 
 function latteArtState:update(dt)
