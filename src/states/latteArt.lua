@@ -107,14 +107,16 @@ function latteArtState:draw()
 end
 
 function latteArtState:update(dt)
-    -- Update mouse position and add to line points
-    local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
-    table.insert(linePoints, mouseX)
-    table.insert(linePoints, mouseY)
+    -- Update mouse position and add to line points only if left mouse button is held down
+    if love.mouse.isDown(1) then
+        local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
+        table.insert(linePoints, mouseX)
+        table.insert(linePoints, mouseY)
 
-    -- Limit the number of points to avoid performance issues
-    if #linePoints > 1000 then
-        table.remove(linePoints, 1)
-        table.remove(linePoints, 1)
+        -- Limit the number of points to avoid performance issues
+        if #linePoints > 1000 then
+            table.remove(linePoints, 1)
+            table.remove(linePoints, 1)
+        end
     end
 end
