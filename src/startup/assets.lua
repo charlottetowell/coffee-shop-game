@@ -20,6 +20,7 @@ assets = {
         image = tilesets.clouds
         ,quads = tilesetQuads.clouds
     }
+    ,coffeeBase = love.graphics.newImage("assets/coffee-base.png")
 }
 
 -- fonts
