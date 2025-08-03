@@ -12,16 +12,23 @@ StateRegistry:register(latteArtState.key, latteArtState)
 -- Table to store line points
 linePoints = {}
 
--- Predefined path coordinates
-predefinedPath = {
-    100, 100,
-    200, 150,
-    300, 200,
-    400, 250,
-    500, 300
+local latteArtConfig = require("src/config/latteArt/latteArt")
+
+-- Sub-states
+local SUB_STATE = {
+    DRAW_ART = "DRAW_ART",
+    JUDGE_ART = "JUDGE_ART"
 }
 
--- Update tolerances
+-- Current sub-state
+local currentSubState = SUB_STATE.DRAW_ART
+
+-- Current latte art pattern
+local CURRENT_LATTE_ART = latteArtConfig[math.random(#latteArtConfig)]
+
+-- Update predefined path to use the selected latte art pattern
+predefinedPath = CURRENT_LATTE_ART.path
+
 -- Tolerance value for line drawing
 local tolerance = 50
 
@@ -88,50 +95,64 @@ function latteArtState:draw()
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("fill", 0, 0, windowWidth, windowHeight)
 
-    -- Draw white text
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print("Latte Art State", windowWidth * 0.5, windowHeight * 0.5)
+    if currentSubState == SUB_STATE.DRAW_ART then
+        -- Draw white text
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print("Latte Art State", windowWidth * 0.5, windowHeight * 0.5)
 
-    -- Draw the predefined path in red
-    if #predefinedPath >= 4 then -- Ensure at least two vertices (x, y pairs)
-        love.graphics.setColor(1, 0, 0)
-        love.graphics.line(predefinedPath)
-    end
+        -- Draw the predefined path in red
+        if #predefinedPath >= 4 then -- Ensure at least two vertices (x, y pairs)
+            love.graphics.setColor(1, 0, 0)
+            love.graphics.line(predefinedPath)
+        end
 
-    -- Draw the user's line if within tolerance
-    if #linePoints >= 4 then -- Ensure at least two vertices (x, y pairs)
-        local filteredPoints = {}
-        for i = 1, #linePoints, 2 do
-            local x, y = linePoints[i], linePoints[i + 1]
-            if isPointNearPath(x, y) then
-                table.insert(filteredPoints, x)
-                table.insert(filteredPoints, y)
+        -- Draw the user's line if within tolerance
+        if #linePoints >= 4 then -- Ensure at least two vertices (x, y pairs)
+            local filteredPoints = {}
+            for i = 1, #linePoints, 2 do
+                local x, y = linePoints[i], linePoints[i + 1]
+                if isPointNearPath(x, y) then
+                    table.insert(filteredPoints, x)
+                    table.insert(filteredPoints, y)
+                end
+            end
+
+            if #filteredPoints >= 4 then
+                love.graphics.setColor(1, 1, 1)
+                love.graphics.line(filteredPoints)
             end
         end
 
-        if #filteredPoints >= 4 then
-            love.graphics.setColor(1, 1, 1)
-            love.graphics.line(filteredPoints)
-        end
+        -- Compute and display match percentage
+        local matchPercentage = computeMatchPercentage()
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print("Match: " .. matchPercentage .. "%", 10, 10)
+    elseif currentSubState == SUB_STATE.JUDGE_ART then
+        -- Display the match percentage in the JUDGE_ART sub-state
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print("Judging Art...", windowWidth * 0.5, windowHeight * 0.4)
+        love.graphics.print("Final Match: " .. computeMatchPercentage() .. "%", windowWidth * 0.5, windowHeight * 0.5)
     end
-
-    -- Compute and display match percentage
-    local matchPercentage = computeMatchPercentage()
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print("Match: " .. matchPercentage .. "%", 10, 10)
 end
 
 function latteArtState:update(dt)
-    -- Update mouse position and add to line points only if left mouse button is held down
-    if love.mouse.isDown(1) then
-        local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
-        table.insert(linePoints, mouseX)
-        table.insert(linePoints, mouseY)
+    if currentSubState == SUB_STATE.DRAW_ART then
+        -- Update mouse position and add to line points only if left mouse button is held down
+        if love.mouse.isDown(1) then
+            local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
+            table.insert(linePoints, mouseX)
+            table.insert(linePoints, mouseY)
 
-        -- Limit the number of points to avoid performance issues
-        if #linePoints > 1000 then
-            table.remove(linePoints, 1)
-            table.remove(linePoints, 1)
+            -- Limit the number of points to avoid performance issues
+            if #linePoints > 1000 then
+                table.remove(linePoints, 1)
+                table.remove(linePoints, 1)
+            end
+        end
+
+        -- Transition to JUDGE_ART sub-state if match percentage reaches 100%
+        if computeMatchPercentage() == 100 then
+            currentSubState = SUB_STATE.JUDGE_ART
         end
     end
 end
