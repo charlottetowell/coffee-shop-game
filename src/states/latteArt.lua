@@ -10,7 +10,7 @@ latteArtState = GameState:new({
 StateRegistry:register(latteArtState.key, latteArtState)
 
 
-local latteArtConfig = require("src/config/latteArt/latteArt")
+local latteArtConfig = require("src/config/latteArtConfig")
 
 -- init vars
 linePoints = {}
@@ -83,6 +83,28 @@ function latteArtState:draw()
     -- draw 
     coffeeBench:draw()
 
+    local cupX = (windowWidth - assets.coffeeBase:getWidth() * pixelScale) / 2
+    local cupY = (windowHeight - assets.coffeeBase:getHeight() * pixelScale) / 2
+
+    local matchPercentage = computeMatchPercentage()
+    if matchPercentage >= 20 then
+        -- Draw a different latte art image based on match percentage and config setup
+        local maxImages = #CURRENT_LATTE_ART.images
+        local imageIndex = math.min(maxImages, math.floor(matchPercentage / (100 / maxImages)))
+
+        -- Ensure imageIndex is always one of the valid values (20, 40, 60, 80, 100)
+        local validIndices = {20, 40, 60, 80, 100}
+        local closestIndex = validIndices[1]
+        for _, index in ipairs(validIndices) do
+            if math.abs(matchPercentage - index) < math.abs(matchPercentage - closestIndex) then
+                closestIndex = index
+            end
+        end
+        imageIndex = closestIndex
+
+        love.graphics.draw(CURRENT_LATTE_ART.images[imageIndex], cupX, cupY, 0, pixelScale, pixelScale)
+    end
+
     if currentSubState == SUB_STATE.DRAW_ART then
 
         -- draw the latte art path
@@ -109,7 +131,6 @@ function latteArtState:draw()
         end
 
         -- match percentage
-        local matchPercentage = computeMatchPercentage()
         love.graphics.setColor(1, 1, 1)
         love.graphics.print("Match: " .. matchPercentage .. "%", 10, 10)
     elseif currentSubState == SUB_STATE.JUDGE_ART then

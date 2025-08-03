@@ -19,11 +19,11 @@ return {
             ,700, 680
         },
         images = {
-            [20] = "assets/latteArt/heart_20.png",
-            [40] = "assets/latteArt/heart_40.png",
-            [60] = "assets/latteArt/heart_60.png",
-            [80] = "assets/latteArt/heart_80.png",
-            [100] = "assets/latteArt/heart_100.png"
+            [20] = assets.latteArt.heart_20,
+            [40] = assets.latteArt.heart_40,
+            [60] = assets.latteArt.heart_60,
+            [80] = assets.latteArt.heart_80,
+            [100] = assets.latteArt.heart_100
         }
     }
 }
