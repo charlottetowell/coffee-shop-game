@@ -146,13 +146,21 @@ function latteArtState:draw()
     love.graphics.print("Mouse: (" .. mouseX .. ", " .. mouseY .. ")", windowWidth - 150, 10)
 end
 
+local pointAddTimer = 0 -- Timer to control point addition
+
 function latteArtState:update(dt)
     if currentSubState == SUB_STATE.DRAW_ART then
-        -- Update mouse position and add to line points only if left mouse button is held down
-        if love.mouse.isDown(1) then
+        -- Update the timer
+        pointAddTimer = pointAddTimer + dt
+
+        -- Add a new point only if the timer exceeds the threshold (e.g., 10 * dt)
+        if love.mouse.isDown(1) and pointAddTimer >= 0.1 then
             local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
             table.insert(linePoints, mouseX)
             table.insert(linePoints, mouseY)
+
+            -- Reset the timer
+            pointAddTimer = 0
 
             -- Limit the number of points to avoid performance issues
             if #linePoints > 1000 then
