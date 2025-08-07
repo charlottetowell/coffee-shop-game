@@ -181,10 +181,9 @@ function latteArtState:draw()
     -- Choose milk pourer image based on mouse state
     local milkPourerImage = love.mouse.isDown(1) and assets.milkPourer.enabled or assets.milkPourer.disabled
     
-    -- Draw milk pourer centered on cursor
-    local pourerWidth = milkPourerImage:getWidth() * pixelScale
-    local pourerHeight = milkPourerImage:getHeight() * pixelScale
-    love.graphics.draw(milkPourerImage, mouseX - pourerWidth/2, mouseY - pourerHeight/2, 0, pixelScale, pixelScale)
+    -- Draw milk pourer with cursor at upper-left corner, with offset for enabled state
+    local offsetY = love.mouse.isDown(1) and (-20 * pixelScale) or 0
+    love.graphics.draw(milkPourerImage, mouseX, mouseY + offsetY, 0, pixelScale, pixelScale)
     
     -- Display mouse position for debugging
     love.graphics.print("Mouse: (" .. mouseX .. ", " .. mouseY .. ")", windowWidth - 150, 10)
