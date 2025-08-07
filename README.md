@@ -19,6 +19,9 @@ Still under development, here are some screenshots of the game so far & key mech
 ![Game Intro GIF](/readme-images/game-intro.gif)
 *Fade-in intro, animated clouds, clickable play button*
 
+![Latte Art Game Preview Image](/readme-images/latte-art-game-preview.png)
+*Draw latte art patterns*
+
 
 ## Inspiration
 Inspiration for the pixel art of this game comes from a local cafe - Colin's Specialty Coffee.
