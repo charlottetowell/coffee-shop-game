@@ -189,32 +189,39 @@ function latteArtState:draw()
     love.graphics.print("Mouse: (" .. mouseX .. ", " .. mouseY .. ")", windowWidth - 150, 10)
 end
 
+
 local pointAddTimer = 0 -- Timer to control point addition
+local hasDrawn = false -- Track if the user has started drawing
+local wasMouseDown = false -- Track previous mouse state
+
 
 function latteArtState:update(dt)
     if currentSubState == SUB_STATE.DRAW_ART then
-        -- Update the timer
+        local mouseDown = love.mouse.isDown(1)
         pointAddTimer = pointAddTimer + dt
 
-        -- Add a new point only if the timer exceeds the threshold (e.g., 10 * dt)
-        if love.mouse.isDown(1) and pointAddTimer >= 0.1 then
-            local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
-            table.insert(linePoints, mouseX)
-            table.insert(linePoints, mouseY)
+        if mouseDown then
+            hasDrawn = true
+            -- Add a new point only if the timer exceeds the threshold
+            if pointAddTimer >= 0.1 then
+                local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
+                table.insert(linePoints, mouseX)
+                table.insert(linePoints, mouseY)
+                pointAddTimer = 0
 
-            -- Reset the timer
-            pointAddTimer = 0
-
-            -- Limit the number of points to avoid performance issues
-            if #linePoints > 1000 then
-                table.remove(linePoints, 1)
-                table.remove(linePoints, 1)
+                -- Limit the number of points to avoid performance issues
+                if #linePoints > 1000 then
+                    table.remove(linePoints, 1)
+                    table.remove(linePoints, 1)
+                end
             end
         end
 
-        -- Transition to JUDGE_ART sub-state if match percentage reaches 100%
-        if computeMatchPercentage() == 100 then
+        -- If the user was drawing and now released the mouse, go to judge mode
+        if not mouseDown and wasMouseDown and hasDrawn then
             currentSubState = SUB_STATE.JUDGE_ART
         end
+
+        wasMouseDown = mouseDown
     end
 end
