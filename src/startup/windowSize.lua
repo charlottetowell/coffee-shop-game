@@ -4,17 +4,23 @@ baseWidthPx = 128
 baseHeightPx = 96
 
 -- default scale
-pixelScale = 10
+pixelScale = 1
 
 -- window dimensions
 windowWidth = baseWidthPx * pixelScale
 windowHeight = baseHeightPx * pixelScale
 
 function setWindowSize(width, height)
-    -- set based on max screen dimensions is size not provided
-    if not width or not height then
-        width, height = love.window.getDesktopDimensions()
+    -- If width and height are provided, use them directly without scaling
+    if width and height then
+        windowWidth = width
+        windowHeight = height
+        love.window.setMode( windowWidth, windowHeight, {resizable = true} )
+        return
     end
+    
+    -- Auto-scale based on desktop dimensions when no specific size is provided
+    width, height = love.window.getDesktopDimensions()
 
     -- Calculate the maximum scale factor that fits within screen dimensions
     local maxScaleX = math.floor(width / baseWidthPx)
