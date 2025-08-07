@@ -28,6 +28,10 @@ assets = {
         ,heart_80 = love.graphics.newImage("assets/latteArt/heart_80.png")
         ,heart_100 = love.graphics.newImage("assets/latteArt/heart_100.png")
     }
+    ,milkPourer = {
+        enabled = love.graphics.newImage("assets/milk-pourer-enabled.png")
+        ,disabled = love.graphics.newImage("assets/milk-pourer.png")
+    }
 }
 
 -- fonts
