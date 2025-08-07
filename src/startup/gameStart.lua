@@ -20,5 +20,5 @@ function gameStart()
     setWindowSize()
     
     -- set initial game state
-    StateRegistry:setCurrentState("INTRO")
+    StateRegistry:setCurrentState("LATTE_ART")
 end

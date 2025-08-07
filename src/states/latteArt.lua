@@ -19,16 +19,27 @@ local SUB_STATE = {
     JUDGE_ART = "JUDGE_ART"
 }
 local currentSubState = SUB_STATE.DRAW_ART
+
 local CURRENT_LATTE_ART = latteArtConfig[math.random(#latteArtConfig)]
 
 
-local drawTolerance = 50
-local matchTolerance = 50
+local drawTolerance = 50 * pixelScale
+local matchTolerance = 50 * pixelScale
 
 -- draw line
 local function isPointNearPath(x, y)
+    local cupX = (windowWidth - assets.coffeeBase:getWidth() * pixelScale) / 2
+    local cupY = (windowHeight - assets.coffeeBase:getHeight() * pixelScale) / 2
+    
+    -- Get the actual latte art image to check its size
+    local latteArtImage = CURRENT_LATTE_ART.images[100] -- Use the 100% image as reference
+    local scaleFactorX = latteArtImage:getWidth() / 54
+    local scaleFactorY = latteArtImage:getHeight() / 54
+    
     for i = 1, #CURRENT_LATTE_ART.path, 2 do
-        local px, py = CURRENT_LATTE_ART.path[i], CURRENT_LATTE_ART.path[i + 1]
+        -- Position relative to where the latte art image is drawn, scaled to match image size
+        local px = CURRENT_LATTE_ART.path[i] * scaleFactorX * pixelScale + cupX
+        local py = CURRENT_LATTE_ART.path[i + 1] * scaleFactorY * pixelScale + cupY
         local distance = math.sqrt((x - px)^2 + (y - py)^2)
         if distance <= drawTolerance then
             return true
@@ -39,8 +50,17 @@ end
 
 -- contribute to match %
 local function isPointStrictlyNearPath(x, y)
+    local cupX = (windowWidth - assets.coffeeBase:getWidth() * pixelScale) / 2
+    local cupY = (windowHeight - assets.coffeeBase:getHeight() * pixelScale) / 2
+    
+    -- Get the actual latte art image to check its size
+    local latteArtImage = CURRENT_LATTE_ART.images[100] -- Use the 100% image as reference
+    local scaleFactorX = latteArtImage:getWidth() / 54
+    local scaleFactorY = latteArtImage:getHeight() / 54
+    
     for i = 1, #CURRENT_LATTE_ART.path, 2 do
-        local px, py = CURRENT_LATTE_ART.path[i], CURRENT_LATTE_ART.path[i + 1]
+        -- Position relative to where the latte art image is drawn, scaled to match image size
+        local px, py = CURRENT_LATTE_ART.path[i] * scaleFactorX * pixelScale + cupX, CURRENT_LATTE_ART.path[i + 1] * scaleFactorY * pixelScale + cupY
         local distance = math.sqrt((x - px)^2 + (y - py)^2)
         if distance <= matchTolerance then
             return true
@@ -50,10 +70,14 @@ local function isPointStrictlyNearPath(x, y)
 end
 
 local function calculatePathLength(path)
+    local latteArtImage = CURRENT_LATTE_ART.images[100]
+    local scaleFactorX = latteArtImage:getWidth() / 54
+    local scaleFactorY = latteArtImage:getHeight() / 54
+    
     local length = 0
     for i = 1, #path - 2, 2 do
-        local x1, y1 = path[i], path[i + 1]
-        local x2, y2 = path[i + 2], path[i + 3]
+        local x1, y1 = path[i] * scaleFactorX * pixelScale, path[i + 1] * scaleFactorY * pixelScale
+        local x2, y2 = path[i + 2] * scaleFactorX * pixelScale, path[i + 3] * scaleFactorY * pixelScale
         length = length + math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
     end
     return length
@@ -110,7 +134,17 @@ function latteArtState:draw()
         -- draw the latte art path
         if #CURRENT_LATTE_ART.path >= 4 then -- min 2 vertices
             love.graphics.setColor(1, 0, 0)
-            love.graphics.line(CURRENT_LATTE_ART.path)
+            -- Create path with scaling and cup position offset
+            local latteArtImage = CURRENT_LATTE_ART.images[100]
+            local scaleFactorX = latteArtImage:getWidth() / 54
+            local scaleFactorY = latteArtImage:getHeight() / 54
+            
+            local offsetPath = {}
+            for i = 1, #CURRENT_LATTE_ART.path, 2 do
+                table.insert(offsetPath, CURRENT_LATTE_ART.path[i] * scaleFactorX * pixelScale + cupX)
+                table.insert(offsetPath, CURRENT_LATTE_ART.path[i + 1] * scaleFactorY * pixelScale + cupY)
+            end
+            love.graphics.line(offsetPath)
         end
 
         -- draw user's path if within drawTolerance
