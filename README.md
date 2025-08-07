@@ -23,3 +23,6 @@ Still under development, here are some screenshots of the game so far & key mech
 ## Inspiration
 Inspiration for the pixel art of this game comes from a local cafe - Colin's Specialty Coffee.
 ![Photos of Colin's Specialty Coffee](/readme-images/colins-specialty-coffee.png)
+
+Some of the many mochas I've had with pretty latte art.
+![Photos of Coffees with Latte Art](/readme-images/latte-art-inspo.png)

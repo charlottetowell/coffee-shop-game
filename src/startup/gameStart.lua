@@ -17,7 +17,7 @@ function gameStart()
     requireEverything()
 
     -- set window size
-    setWindowSize(windowWidth, windowHeight)
+    setWindowSize()
     
     -- set initial game state
     StateRegistry:setCurrentState("INTRO")
