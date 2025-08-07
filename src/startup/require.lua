@@ -29,5 +29,6 @@ function requireEverything()
     -- game states
     require "src/states/intro"
     require "src/states/mainMenu"
+    require "src/states/latteArt"
     
 end
