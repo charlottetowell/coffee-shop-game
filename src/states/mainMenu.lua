@@ -3,7 +3,7 @@ require "src/states/registry"
 
 menuState = GameState:new({
     key = "MAIN_MENU"
-    ,transition_to_key = "LATTE_ART"
+    ,transition_to_keys = {SHOP = true}
 })
 
 -- register state
@@ -20,8 +20,8 @@ end
 
 function menuState:update(dt)
     if suit.ImageButton(assets.playButton, {hovered=assets.playButtonHover, scale=pixelScale}, windowWidth * 0.6, windowHeight * 0.75).hit then
-        print("Button clicked!")
-        StateRegistry:transitionTo(self.transition_to_key)
+        resetShopRun()
+        StateRegistry:transitionTo("SHOP")
     end
 
     -- -- centre info button underneath image button

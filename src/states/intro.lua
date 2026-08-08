@@ -1,20 +1,20 @@
 require "src/states/init"
 require "src/states/registry"
 
-menuState = GameState:new({
+introState = GameState:new({
     key = "INTRO"
-    ,transition_to_key = "MAIN_MENU"
+    ,transition_to_keys = {MAIN_MENU = true}
 })
 
 -- register state
-StateRegistry:register(menuState.key, menuState)
+StateRegistry:register(introState.key, introState)
 
 local alpha = 1
 local timer = love.timer.getTime()
 local startFadeAt = 3 -- seconds
 local transitionSpeed = 0.01
 
-function menuState:draw()
+function introState:draw()
 
     -- draw 
     cafeOutside:draw()
@@ -33,9 +33,9 @@ function menuState:draw()
 end
 
 
-function menuState:update(dt)
+function introState:update(dt)
     if alpha == 0 then
-        StateRegistry:transitionTo(self.transition_to_key)
+        StateRegistry:transitionTo("MAIN_MENU")
     else
         if love.timer.getTime() - timer > startFadeAt then
             alpha = alpha - transitionSpeed
